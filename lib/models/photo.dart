@@ -11,8 +11,8 @@ class Photo {
     required this.width,
     required this.height,
     required this.src,
-    required this.likes,
-    required this.isFavorite,
+    this.isFavorite = false,
+    this.likes = 0,
   });
 
   factory Photo.fromJson(Map<String, dynamic> json) {
@@ -26,7 +26,7 @@ class Photo {
     );
   }
 
-  Photo copyWith(int? likes, bool? isFavorite) {
+  Photo copyWith({int? likes, bool? isFavorite}) {
     return Photo(
       photoId: photoId,
       width: width,
