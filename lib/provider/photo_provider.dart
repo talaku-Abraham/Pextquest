@@ -10,6 +10,8 @@ class PhotoProvider with ChangeNotifier {
   // fetched iages from the api
   List<Photo> _photos = [];
 
+  List<Photo> favoritePhotos = [];
+
   bool isLoading = false;
 
   // get the images
@@ -41,5 +43,11 @@ class PhotoProvider with ChangeNotifier {
 
       notifyListeners();
     }
+  }
+
+  void getfavoritePhotos() {
+    favoritePhotos = _photos.where((pic) => pic.isFavorite == true).toList();
+
+    notifyListeners();
   }
 }

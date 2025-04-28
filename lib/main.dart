@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pextquest/api/pexels_api_service.dart';
+import 'package:pextquest/provider/photo_provider.dart';
+import 'package:pextquest/route.dart';
 import 'package:pextquest/widgets/homepage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -12,13 +16,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+    return MultiProvider(
+      providers: [
+        Provider<PexelsApiService>(create: (context) => PexelsApiService()),
+        ChangeNotifierProvider<PhotoProvider>(
+          create:
+              (context) =>
+                  PhotoProvider(apiService: context.read<PexelsApiService>()),
+
+          // context.read<ApiService>()
+        ),
+      ],
+      child: MaterialApp.router(
+        routerConfig: router,
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        ),
       ),
-      home: const HomePage(title: 'pextquest'),
     );
   }
 }
