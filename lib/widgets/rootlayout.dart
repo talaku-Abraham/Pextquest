@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pextquest/provider/photo_provider.dart';
 import 'package:provider/provider.dart';
+import "package:pextquest/provider/search_field_controller.dart";
 
 class Rootlayout extends StatelessWidget {
   const Rootlayout({super.key, required this.child});
@@ -12,6 +13,9 @@ class Rootlayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final photoProvider = context.read<PhotoProvider>();
 
+    final searchController =
+        context.read<SearchFieldController>().textEditingController;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Pextquest"),
@@ -19,11 +23,31 @@ class Rootlayout extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.favorite_outline_rounded, size: 30),
             onPressed: () {
-              photoProvider.getfavoritePhotos();
+              // photoProvider.getfavoritePhotos();
               context.push("/favorite");
             },
           ),
-          Icon(Icons.search),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              width: 200,
+              height: 100,
+
+              child: TextField(
+                controller: searchController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter a search term',
+                ),
+                onSubmitted:
+                    (value) =>
+                        photoProvider.searchByKeyWord(searchController.text),
+              ),
+            ),
+          ),
+          // IconButton(icon: Icon(Icons.search), onPressed: () {
+
+          // }),
         ],
       ),
       body: child,

@@ -24,6 +24,5 @@ class BuildGridOfImages extends StatelessWidget {
         itemCount: photos.length,
       ),
     );
-    ;
   }
 }

@@ -3,8 +3,8 @@ class Photo {
   final int width;
   final int height;
   final Src src;
-  final int likes;
-  final bool isFavorite;
+  int likes;
+  bool isFavorite;
 
   Photo({
     required this.photoId,

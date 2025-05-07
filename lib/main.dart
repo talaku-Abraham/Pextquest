@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pextquest/api/pexels_api_service.dart';
 import 'package:pextquest/provider/photo_provider.dart';
 import 'package:pextquest/route.dart';
-import 'package:pextquest/widgets/homepage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:pextquest/provider/search_field_controller.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -19,6 +19,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<PexelsApiService>(create: (context) => PexelsApiService()),
+        ChangeNotifierProvider<SearchFieldController>(
+          create: (context) => SearchFieldController(),
+        ),
         ChangeNotifierProvider<PhotoProvider>(
           create:
               (context) =>

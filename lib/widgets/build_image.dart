@@ -14,7 +14,8 @@ class BuildImage extends StatelessWidget {
     final photoProvider = context.read<PhotoProvider>();
 
     return Stack(
-      alignment: Alignment.topLeft,
+      // align its unpositioned element to the topleft
+      alignment: Alignment.bottomRight,
       children: [
         Positioned.fill(
           child: ClipRRect(
@@ -28,24 +29,21 @@ class BuildImage extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(
-          bottom: 0,
-          left: 0,
-          child: Row(
-            children: [
-              // Icon(Icons.favorite, color: Colors.white),
-              // SizedBox(width: 3),
-              IconButton(
-                onPressed: () {
-                  photoProvider.toggleFavorite(photo.photoId);
-                },
-                icon: Icon(
-                  Icons.thumb_up,
-                  color: photo.isFavorite ? Colors.red : Colors.white,
-                ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            // Icon(Icons.favorite, color: Colors.white),
+            // SizedBox(width: 3),
+            IconButton(
+              onPressed: () {
+                photoProvider.toggleFavorite(photo);
+              },
+              icon: Icon(
+                Icons.thumb_up,
+                color: photo.isFavorite ? Colors.red : Colors.white,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );
