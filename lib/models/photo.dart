@@ -1,3 +1,31 @@
+class PhotoListResponse {
+  int? perPage;
+  String? nextPage;
+  String? prevPage;
+
+  List<Photo>? photos;
+
+  PhotoListResponse({this.nextPage, this.perPage, this.photos, this.prevPage});
+
+  factory PhotoListResponse.fromJson(Map<String, dynamic> json) {
+    List<Photo> tempPhotos;
+    tempPhotos = [];
+
+    if (json['photos'] != null) {
+      json['photos'].forEach((v) {
+        tempPhotos.add(Photo.fromJson(v));
+      });
+    }
+
+    return PhotoListResponse(
+      nextPage: json["next_page"],
+      perPage: json["per_page"],
+      prevPage: json["prev_page"],
+      photos: tempPhotos,
+    );
+  }
+}
+
 class Photo {
   final int photoId;
   final int width;
@@ -24,6 +52,10 @@ class Photo {
       likes: json["like"] ?? 0,
       isFavorite: false,
     );
+  }
+
+  Map<String, Object?> toMap() {
+    return {'photoId': photoId};
   }
 
   Photo copyWith({int? likes, bool? isFavorite}) {

@@ -11,7 +11,7 @@ class Rootlayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final photoProvider = context.read<PhotoProvider>();
+    final photoProvider = context.watch<PhotoProvider>();
 
     final searchController =
         context.read<SearchFieldController>().textEditingController;
@@ -21,10 +21,21 @@ class Rootlayout extends StatelessWidget {
         title: Text("Pextquest"),
         actions: [
           IconButton(
+            icon: Icon(Icons.home),
+            onPressed: () {
+              photoProvider.searchScreen = false;
+              photoProvider.photos.clear();
+              photoProvider.loadPhotos();
+              searchController.text = "";
+              print("tale");
+              context.pushReplacement("/");
+            },
+          ),
+          IconButton(
             icon: Icon(Icons.favorite_outline_rounded, size: 30),
             onPressed: () {
               // photoProvider.getfavoritePhotos();
-              context.push("/favorite");
+              context.pushReplacement("/favorite");
             },
           ),
           Padding(
@@ -39,15 +50,15 @@ class Rootlayout extends StatelessWidget {
                   border: OutlineInputBorder(),
                   hintText: 'Enter a search term',
                 ),
-                onSubmitted:
-                    (value) =>
-                        photoProvider.searchByKeyWord(searchController.text),
+                onSubmitted: (value) {
+                  photoProvider.searchScreen = true;
+                  photoProvider.photos.clear();
+                  photoProvider.searchKeyword = searchController.text;
+                  photoProvider.searchPhotoByKeyWord();
+                },
               ),
             ),
           ),
-          // IconButton(icon: Icon(Icons.search), onPressed: () {
-
-          // }),
         ],
       ),
       body: child,

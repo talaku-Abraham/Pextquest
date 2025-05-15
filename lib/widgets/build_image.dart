@@ -37,6 +37,9 @@ class BuildImage extends StatelessWidget {
             IconButton(
               onPressed: () {
                 photoProvider.toggleFavorite(photo);
+                // if (photo.isFavorite) {
+                //   databaseProvider.insertPhoto(photo.toMap());
+                // }
               },
               icon: Icon(
                 Icons.thumb_up,
