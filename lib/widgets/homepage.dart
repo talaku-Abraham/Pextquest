@@ -49,10 +49,8 @@ class _HomeState extends State<Home> with InfiniteScrollMixin {
   void onLoadMore() {
     final photoProvider = context.read<PhotoProvider>();
     if (photoProvider.searchScreen) {
-      print("search screen baby");
       photoProvider.searchPhotoByKeyWord();
     } else {
-      print("load function called correctly");
       photoProvider.loadPhotos();
     }
   }

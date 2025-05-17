@@ -9,8 +9,8 @@ class PhotoProvider with ChangeNotifier {
 
   PhotoProvider({required this.apiService, required this.dataBaseService});
 
-  int page = 1;
-  int searchPage = 1;
+  int homePageNumber = 1;
+  int searchPageNumber = 1;
 
   String searchKeyword = "";
 
@@ -24,13 +24,13 @@ class PhotoProvider with ChangeNotifier {
   List<int> favoritePhotoIds = [];
 
   bool isLoading = false;
-
+  // setter for the _photos
   set photos(List<Photo> photos) {
     _photos = photos;
     notifyListeners();
   }
 
-  // getter for the photos
+  // getter for the _photos
   List<Photo> get photos => _photos;
 
   // call the api and store the result photos in the _photos
@@ -38,26 +38,29 @@ class PhotoProvider with ChangeNotifier {
     // if (isLoading) return;
     isLoading = true;
     // notifyListeners();
+    try {
+      final response = await apiService.fetchPhotos(homePageNumber);
 
-    final response = await apiService.fetchPhotos(page);
-
-    if (response.nextPage != null) {
-      page++;
-      print(page);
-    }
-
-    _photos.addAll(response.photos!);
-
-    // get list of the favorite pic ids from the database
-    favoritePhotoIds = await _getFavoritePicIds();
-    for (var pic in _photos) {
-      if (favoritePhotoIds.contains(pic.photoId)) {
-        pic.isFavorite = true;
+      if (response.nextPage != null) {
+        homePageNumber++;
+        // print(homePageNumber);
       }
-    }
 
-    isLoading = false;
-    notifyListeners();
+      _photos.addAll(response.photos!);
+
+      // get list of the favorite pic ids from the database to mark then as favorite
+      favoritePhotoIds = await _getFavoritePicIds();
+      for (var pic in _photos) {
+        if (favoritePhotoIds.contains(pic.photoId)) {
+          pic.isFavorite = true;
+        }
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<List<int>> _getFavoritePicIds() async {
@@ -84,7 +87,7 @@ class PhotoProvider with ChangeNotifier {
       }
     }
     isLoading = false;
-    print("${favoritePhotos.length} i have added a favorite");
+
     notifyListeners();
   }
 
@@ -108,7 +111,7 @@ class PhotoProvider with ChangeNotifier {
 
     final result = await apiService.fetchPhotosByKeyword(
       searchKeyword,
-      searchPage,
+      searchPageNumber,
     );
 
     // _photos.clear();
@@ -119,7 +122,7 @@ class PhotoProvider with ChangeNotifier {
     */
 
     if (result.nextPage != null) {
-      searchPage++;
+      searchPageNumber++;
     }
 
     for (var pic in _photos) {

@@ -33,6 +33,7 @@ class Rootlayout extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(Icons.favorite_outline_rounded, size: 30),
+
             onPressed: () {
               // photoProvider.getfavoritePhotos();
               context.pushReplacement("/favorite");
